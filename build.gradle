@@ -1,0 +1,22 @@
+buildscript {
+	repositories {
+		maven { url "https://maven.aliyun.com/repository/google" }
+		maven { url 'https://maven.aliyun.com/repository/public' }
+	}
+	dependencies {
+		classpath DeptConfig.Gradle
+		classpath DeptConfig.GradleKotlin
+		classpath DeptConfig.GradleKotlinAndroid
+	}
+}
+
+allprojects {
+	repositories {
+		maven { url "https://maven.aliyun.com/repository/google" }
+		maven { url 'https://maven.aliyun.com/repository/public' }
+	}
+}
+
+task clean(type: Delete) {
+	delete rootProject.buildDir
+}

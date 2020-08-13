@@ -1,0 +1,41 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+	compileSdkVersion Config.compileSdkVersion
+	defaultConfig {
+		minSdkVersion Config.minSdkVersion
+		targetSdkVersion Config.targetSdkVersion
+		versionCode Config.versionCode
+		versionName Config.versionName
+	}
+
+	compileOptions {
+		targetCompatibility JavaVersion.VERSION_1_8
+		sourceCompatibility JavaVersion.VERSION_1_8
+	}
+
+	kotlinOptions { jvmTarget = "1.8" }
+}
+
+dependencies {
+	api DeptConfig.AppCompat
+	api DeptConfig.AppCompatKtx
+	api DeptConfig.AndroidUtilCode
+	api DeptConfig.BaseRecyclerViewAdapterHelper
+	api DeptConfig.Coroutine
+	api DeptConfig.ConstraintLayout
+	api DeptConfig.Glide
+	api DeptConfig.GlideOkHttp
+	api DeptConfig.Kotlin
+	api DeptConfig.LifecycleExtensions
+	api DeptConfig.LifecycleRuntimeKtx
+
+	kapt DeptConfig.GlideKapt
+
+	testImplementation DeptConfig.Junit
+	androidTestImplementation DeptConfig.TestJunit
+	androidTestImplementation DeptConfig.TestEspresso
+}

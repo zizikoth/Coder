@@ -1,0 +1,5 @@
+include ':code3'
+include ':code2'
+include ':code1'
+include ':core'
+rootProject.name = "Coder"
