@@ -1,7 +1,6 @@
-apply plugin: 'com.android.library'
+apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
 
 android {
 	compileSdkVersion Config.compileSdkVersion
@@ -21,21 +20,8 @@ android {
 }
 
 dependencies {
-	api DeptConfig.AppCompat
-	api DeptConfig.AppCompatKtx
-	api DeptConfig.Anko
-	api DeptConfig.AndroidUtilCode
-	api DeptConfig.BaseRecyclerViewAdapterHelper
-	api DeptConfig.Coroutine
-	api DeptConfig.ConstraintLayout
-	api DeptConfig.Glide
-	api DeptConfig.GlideOkHttp
-	api DeptConfig.Kotlin
-	api DeptConfig.LifecycleExtensions
-	api DeptConfig.LifecycleRuntimeKtx
-
-	kapt DeptConfig.GlideKapt
-
+	implementation fileTree(dir: "libs", include: ["*.jar"])
+	implementation project(path: ':core')
 	testImplementation DeptConfig.Junit
 	androidTestImplementation DeptConfig.TestJunit
 	androidTestImplementation DeptConfig.TestEspresso

@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
+import com.blankj.utilcode.util.BarUtils
 import com.memo.core.R
 
 /**
@@ -28,6 +29,7 @@ abstract class BaseActivity : AppCompatActivity() {
 		overridePendingTransition(R.anim.slide_in_from_right, R.anim.activity_fade_hide)
 		super.onCreate(savedInstanceState)
 		setContentView(bindLayoutRes())
+		BarUtils.setStatusBarLightMode(this, true)
 		initialize()
 	}
 

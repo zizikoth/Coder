@@ -19,6 +19,7 @@ object DeptConfig {
 
 	const val AppCompat = "androidx.appcompat:appcompat:1.2.0"
 	const val AppCompatKtx = "androidx.core:core-ktx:1.3.1"
+	const val Anko = "org.jetbrains.anko:anko-commons:0.10.8"
 	const val AndroidUtilCode = "com.blankj:utilcodex:1.29.0"
 	const val BaseRecyclerViewAdapterHelper = "com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4"
 	const val ConstraintLayout = "androidx.constraintlayout:constraintlayout:2.0.0-beta7"
