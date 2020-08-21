@@ -12,6 +12,7 @@
 		android:supportsRtl="true"
 		android:theme="@style/BaseTheme"
 		tools:ignore="AllowBackup">
+		<activity android:name=".ui.XFermodeActivity"></activity>
 		<activity android:name=".launch.MainActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />

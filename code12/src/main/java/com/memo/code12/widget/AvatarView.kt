@@ -34,13 +34,23 @@ class AvatarView @JvmOverloads constructor(
 
 	override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
 		super.onSizeChanged(w, h, oldw, oldh)
-		bounds = RectF((width - avatarSize) / 2, (height - avatarSize) / 2, (width + avatarSize) / 2, (height + avatarSize) / 2)
+		bounds = RectF(
+			(width - avatarSize) / 2,
+			(height - avatarSize) / 2,
+			(width + avatarSize) / 2,
+			(height + avatarSize) / 2
+		)
 	}
 
 	@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 	override fun onDraw(canvas: Canvas) {
 		val count = canvas.saveLayer(bounds, null)
-		canvas.drawOval((width - avatarSize) / 2, (height - avatarSize) / 2, (width + avatarSize) / 2, (height + avatarSize) / 2, paint)
+		canvas.drawOval(
+			(width - avatarSize) / 2,
+			(height - avatarSize) / 2,
+			(width + avatarSize) / 2,
+			(height + avatarSize) / 2, paint
+		)
 		paint.xfermode = xfermode
 		val bitmap = ImageUtils.getBitmap(R.drawable.cake, avatarSize.toInt())
 		canvas.drawBitmap(bitmap, (width - avatarSize) / 2, (height - avatarSize) / 2, paint)
