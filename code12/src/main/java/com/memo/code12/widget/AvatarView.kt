@@ -7,8 +7,8 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.annotation.RequiresApi
 import com.memo.code12.R
-import com.memo.code12.utils.ImageUtils
 import com.memo.core.tool.ext.dp2pxf
+import com.memo.core.utils.ImageUtils
 
 /**
  * title:
@@ -24,7 +24,7 @@ class AvatarView @JvmOverloads constructor(
 	context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-	private val avatarSize = 100.dp2pxf()
+	private val avatarSize = 100.dp2pxf
 
 	private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 

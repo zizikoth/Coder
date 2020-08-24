@@ -50,11 +50,11 @@ class PieView @JvmOverloads constructor(
 
 	private var startAngle = -90f
 
-	private val pieRadius = 150.dp2pxf()
+	private val pieRadius = 150.dp2pxf
 
 	private lateinit var rectF: RectF
 
-	private val moveLength = 20.dp2pxf()
+	private val moveLength = 20.dp2pxf
 	private var movePercent = 0f
 		set(value) {
 			field = value

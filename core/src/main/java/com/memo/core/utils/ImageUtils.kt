@@ -1,4 +1,4 @@
-package com.memo.code12.utils
+package com.memo.core.utils
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

@@ -1,0 +1,22 @@
+textAlign = Paint.Align.CENTER 这是字体水平剧中
+strokeCap = Paint.Cap.ROUND 画笔圆角
+typeface = ResourcesCompat.getFont(context, R.font.zhenyan) 字体设置
+
+⚠️⚠️⚠️
+canvas.drawText()方法中的xy
+Paint.Align.CENTER
+x LEFT是字符串最左边的横坐标 CENTER是字符串中心的横坐标 RIGHT是字符串右边的横坐标
+y 字符串baseline的纵坐标
+希望文字局中 英文字母固定 中文都可以
+textAlign = Paint.Align.CENTER
+canvas.drawText(description, width / 2f, height / 2f - (textBounds.top + textBounds.bottom) / 2f, textPaint)
+如果英文字母不固定 会随时变换b->p
+textPaint.getFontMetrics(textMetrics)
+canvas.drawText(description, width / 2f, height / 2f - (textMetrics.ascent + textMetrics.descent) / 2f, textPaint)
+
+top baseline到top的距离 负值
+ascent baseline到ascent的距离 负值
+baseline 顶部到baseline的距离 正值
+descent baseline到descent的距离 正值
+bottom baseline到bottom的距离 正值
+paint.fontSpacing 一行文字的高度

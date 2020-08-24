@@ -32,22 +32,22 @@ class DashboardView @JvmOverloads constructor(
 	private val sweepAngle = 240f
 
 	// 刻度宽度
-	private val dashWidth = 2.dp2pxf()
+	private val dashWidth = 2.dp2pxf
 
 	// 刻度高度
-	private val dashHeight = 10.dp2pxf()
+	private val dashHeight = 10.dp2pxf
 
 	// 刻度数量
 	private val dashSize = 20
 
 	// 仪表盘半径
-	private val dashboardRadius = 150.dp2pxf()
+	private val dashboardRadius = 150.dp2pxf
 
 	// 中心圆点半径
-	private val centerPointRadius = 8.dp2pxf()
+	private val centerPointRadius = 8.dp2pxf
 
 	// 指针长度
-	private val pointerLength = 100.dp2pxf()
+	private val pointerLength = 100.dp2pxf
 
 	private lateinit var pathMeasure: PathMeasure
 	private lateinit var path: Path
@@ -84,7 +84,7 @@ class DashboardView @JvmOverloads constructor(
 
 	// 仪表盘画笔
 	private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-		strokeWidth = 5.dp2pxf()
+		strokeWidth = 5.dp2pxf
 		style = Paint.Style.STROKE
 	}
 
