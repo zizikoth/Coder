@@ -31,7 +31,7 @@ fun RecyclerView.applyList(data: ArrayList<String>, listener: OnItemClickListene
 		val mAdapter = BaseItemAdapter().apply { setList(data) }
 		val divider = RecyclerViewDivider.Builder(context)
 			.setColorRes(R.color.color_F5F5F5)
-			.setHeightDp(0.5f)
+			.setHeightDp(1f)
 			.setMarginLeftDp(15f)
 			.setMarginRightDp(15f)
 			.build()

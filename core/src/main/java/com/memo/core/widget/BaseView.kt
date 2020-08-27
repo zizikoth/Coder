@@ -22,11 +22,11 @@ abstract class BaseView @JvmOverloads constructor(
 	override fun onDraw(canvas: Canvas?) {
 		super.onDraw(canvas)
 		canvas?.let {
-			initialize()
+			initDraw()
 			startDraw(it)
 		}
 	}
 
-	abstract fun initialize()
+	abstract fun initDraw()
 	abstract fun startDraw(canvas: Canvas)
 }
