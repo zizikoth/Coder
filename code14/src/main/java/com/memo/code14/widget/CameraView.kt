@@ -5,10 +5,10 @@ import android.graphics.Camera
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.view.View
 import androidx.core.graphics.withSave
 import com.memo.code14.R
 import com.memo.core.utils.ImageUtils
-import com.memo.core.widget.BaseView
 import org.jetbrains.anko.dimen
 
 /**
@@ -23,7 +23,7 @@ import org.jetbrains.anko.dimen
  */
 class CameraView @JvmOverloads constructor(
 	context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : BaseView(context, attrs, defStyleAttr) {
+) : View(context, attrs, defStyleAttr) {
 
 	private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 	private val imageSize = dimen(R.dimen.dp150)
@@ -36,11 +36,7 @@ class CameraView @JvmOverloads constructor(
 		camera.setLocation(0f, 0f, -4 * resources.displayMetrics.density)
 	}
 
-	override fun initDraw() {
-
-	}
-
-	override fun startDraw(canvas: Canvas) {
+	override fun onDraw(canvas: Canvas) {
 		// 绘制上半部分
 		canvas.withSave {
 			canvas.translate(width / 2f, height / 2f)

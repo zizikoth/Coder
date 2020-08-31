@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
-	package="com.memo.code15">
+	package="com.memo.code16">
 	
 	<application
 		android:name="com.memo.core.base.BaseApp"
@@ -12,8 +12,8 @@
 		android:supportsRtl="true"
 		android:theme="@style/BaseTheme"
 		tools:ignore="AllowBackup">
-		<activity android:name=".ui.AnimActivity"></activity>
-		<activity android:name=".ui.ObjectAnimatorActivity" />
+		<activity android:name=".ui.DrawableActivity" />
+		<activity android:name=".ui.DrawableBitmapActivity" />
 		<activity android:name=".launch.MainActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />

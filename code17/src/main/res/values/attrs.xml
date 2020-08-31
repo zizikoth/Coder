@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<declare-styleable name="MaterialEditText">
+		<attr name="met_maxLength" format="integer" />
+		<attr name="met_useTipLabel" format="boolean" />
+		<attr name="met_tip" format="string" />
+	</declare-styleable>
+</resources>

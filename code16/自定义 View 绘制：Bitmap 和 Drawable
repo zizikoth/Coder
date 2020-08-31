@@ -1,0 +1,4 @@
+Bitmap 是位图信息的存储工具，存储每一个像素的数据
+Drawable 是绘制工具，调用canvas进行绘制
+
+使用Drawable时候需要对drawable设置边界 位置信息

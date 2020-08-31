@@ -5,9 +5,9 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.util.AttributeSet
+import android.view.View
 import com.memo.code14.R
 import com.memo.core.utils.ImageUtils
-import com.memo.core.widget.BaseView
 import org.jetbrains.anko.dimen
 
 /**
@@ -22,18 +22,19 @@ import org.jetbrains.anko.dimen
  */
 class ClipView @JvmOverloads constructor(
 	context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : BaseView(context, attrs, defStyleAttr) {
+) : View(context, attrs, defStyleAttr) {
 
 	private val imageSize = dimen(R.dimen.dp150)
 	private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 	private val cake = ImageUtils.getBitmap(R.drawable.cake, imageSize)
 	private val circlePath = Path()
 
-	override fun initDraw() {
+	override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+		super.onSizeChanged(w, h, oldw, oldh)
 		circlePath.addCircle(width / 2f, height / 2f, imageSize / 2f, Path.Direction.CW)
 	}
 
-	override fun startDraw(canvas: Canvas) {
+	override fun onDraw(canvas: Canvas) {
 		canvas.clipPath(circlePath)
 		canvas.drawBitmap(cake, (width - cake.width) / 2f, (height - cake.height) / 2f, paint)
 	}

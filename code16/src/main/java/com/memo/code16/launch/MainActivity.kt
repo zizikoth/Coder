@@ -1,26 +1,26 @@
-package com.memo.code15.launch
+package com.memo.code16.launch
 
 import com.chad.library.adapter.base.listener.OnItemClickListener
-import com.memo.code15.ui.AnimActivity
-import com.memo.code15.ui.ObjectAnimatorActivity
+import com.memo.code16.ui.DrawableActivity
+import com.memo.code16.ui.DrawableBitmapActivity
 import com.memo.core.base.BaseListActivity
 import org.jetbrains.anko.startActivity
 
 class MainActivity : BaseListActivity() {
+
 	override fun bindData(): ArrayList<String> {
 		return arrayListOf(
-			"ObjectAnimator",
-			"Anim"
+			"Bitmap <-> Drawable",
+			"Drawable"
 		)
 	}
 
 	override fun bindListener(): OnItemClickListener {
 		return OnItemClickListener { adapter, _, position ->
 			when (adapter.data[position]) {
-				"ObjectAnimator" -> startActivity<ObjectAnimatorActivity>()
-				"Anim" -> startActivity<AnimActivity>()
+				"Bitmap <-> Drawable" -> startActivity<DrawableBitmapActivity>()
+				"Drawable" -> startActivity<DrawableActivity>()
 			}
 		}
 	}
-
 }

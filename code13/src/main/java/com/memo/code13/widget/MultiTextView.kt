@@ -1,16 +1,15 @@
 package com.memo.code13.widget
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.view.View
 import com.memo.code13.R
 import com.memo.core.tool.ext.dp2px
 import com.memo.core.tool.ext.dp2pxf
 import com.memo.core.tool.ext.sp2pxf
 import com.memo.core.utils.ImageUtils
-import com.memo.core.widget.BaseView
 
 /**
  * title:
@@ -24,7 +23,7 @@ import com.memo.core.widget.BaseView
  */
 class MultiTextView @JvmOverloads constructor(
 	context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : BaseView(context, attrs, defStyleAttr) {
+) : View(context, attrs, defStyleAttr) {
 
 	private val source =
 		"There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc."
@@ -37,12 +36,9 @@ class MultiTextView @JvmOverloads constructor(
 
 	private val imagePadding = 50.dp2pxf
 
-	override fun initialize() {
+	override fun onDraw(canvas: Canvas) {
 		paint.textSize = 15.sp2pxf
-	}
 
-	@SuppressLint("NewApi")
-	override fun startDraw(canvas: Canvas) {
 		canvas.drawBitmap(bitmap, (width - bitmap.width).toFloat(), imagePadding, paint)
 
 		paint.getFontMetrics(fontMetrics)

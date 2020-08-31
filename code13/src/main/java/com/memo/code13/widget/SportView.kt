@@ -3,11 +3,11 @@ package com.memo.code13.widget
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import com.memo.code13.R
 import com.memo.core.tool.ext.dp2pxf
 import com.memo.core.tool.ext.sp2pxf
-import com.memo.core.widget.BaseView
 
 /**
  * title:
@@ -21,7 +21,7 @@ import com.memo.core.widget.BaseView
  */
 class SportView @JvmOverloads constructor(
 	context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : BaseView(context, attrs, defStyleAttr) {
+) : View(context, attrs, defStyleAttr) {
 
 	private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 	private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -34,7 +34,7 @@ class SportView @JvmOverloads constructor(
 	private val textMetrics = Paint.FontMetrics()
 	private lateinit var bounds: RectF
 
-	override fun initialize() {
+	override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
 		paint.run {
 			style = Paint.Style.STROKE
 			strokeWidth = roundWidth
@@ -53,7 +53,7 @@ class SportView @JvmOverloads constructor(
 		bounds = RectF(width / 2f - radius, height / 2f - radius, width / 2f + radius, height / 2f + radius)
 	}
 
-	override fun startDraw(canvas: Canvas) {
+	override fun onDraw(canvas: Canvas) {
 		// 画底环
 		paint.color = Color.LTGRAY
 		canvas.drawArc(bounds, -90f, 360f, false, paint)
