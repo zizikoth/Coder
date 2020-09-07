@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".ui.CircleActivity">
+	
+	<com.memo.code18_20.widget.CircleView
+		android:layout_width="@dimen/dp300"
+		android:layout_height="@dimen/dp200"
+		android:layout_gravity="center"
+		android:background="@color/color_line" />
+	
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content" />
+</LinearLayout>
