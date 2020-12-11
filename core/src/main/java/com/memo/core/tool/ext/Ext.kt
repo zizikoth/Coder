@@ -11,7 +11,7 @@ package com.memo.core.tool.ext
  * Talk is cheap, Show me the code.
  */
 fun Int.foreach(action: (Int) -> Unit) {
-	(0 until this).forEach {
-		action.invoke(it)
+	for (i in 0 until this) {
+		action.invoke(i)
 	}
 }

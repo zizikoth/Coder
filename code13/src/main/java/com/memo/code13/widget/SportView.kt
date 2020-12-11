@@ -75,6 +75,7 @@ class SportView @JvmOverloads constructor(
 		canvas.drawText(description, 0f, -textMetrics.top, textPaint)
 		// 左下
 		canvas.drawText(description, 0f, height - textMetrics.bottom, textPaint)
+
 		textPaint.textAlign = Paint.Align.RIGHT
 		// 右上
 		canvas.drawText(description, width.toFloat(), -textMetrics.top, textPaint)

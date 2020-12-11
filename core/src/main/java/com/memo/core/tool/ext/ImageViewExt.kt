@@ -21,7 +21,7 @@ import com.memo.core.tool.glide.GlideApp
 fun ImageView.load(url: Any) {
 	GlideApp.with(this)
 		.load(url)
-		.placeholder(ColorDrawable(Color.GRAY))
+		.placeholder(ColorDrawable(Color.LTGRAY))
 		.centerCrop()
 		.into(this)
 }
@@ -29,7 +29,7 @@ fun ImageView.load(url: Any) {
 fun ImageView.loadRound(url: Any, radius: Int) {
 	GlideApp.with(this)
 		.load(url)
-		.placeholder(ColorDrawable(Color.GRAY))
+		.placeholder(ColorDrawable(Color.LTGRAY))
 		.transform(CenterCrop(), RoundedCorners(radius))
 		.into(this)
 }
@@ -37,7 +37,7 @@ fun ImageView.loadRound(url: Any, radius: Int) {
 fun ImageView.loadCircle(url: Any) {
 	GlideApp.with(this)
 		.load(url)
-		.placeholder(ColorDrawable(Color.GRAY))
+		.placeholder(ColorDrawable(Color.LTGRAY))
 		.transform(CenterCrop(), CircleCrop())
 		.into(this)
 }
