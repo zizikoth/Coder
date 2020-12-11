@@ -4,22 +4,24 @@
 	package="com.memo.code23">
 	
 	<application
-		android:name="com.memo.core.base.BaseApp"
-		android:allowBackup="false"
-		android:icon="@mipmap/ic_launcher"
-		android:label="@string/app_name"
-		android:roundIcon="@mipmap/ic_launcher_round"
-		android:supportsRtl="true"
-		android:theme="@style/BaseTheme"
-		tools:ignore="AllowBackup">
-		<activity android:name=".ui.ScaleImageViewActivity" />
-		<activity android:name=".launch.MainActivity">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-		</activity>
-	</application>
+        android:name="com.memo.core.base.BaseApp"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/BaseTheme"
+        tools:ignore="AllowBackup">
+        <activity android:name=".ui.ScaleImageViewActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".launch.MainActivity">
+
+        </activity>
+    </application>
 
 </manifest>

@@ -8,14 +8,14 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
+import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.OverScroller
 import androidx.core.view.GestureDetectorCompat
+import androidx.core.view.ViewCompat
 import com.memo.code23.R
 import com.memo.core.utils.ImageUtils
 import org.jetbrains.anko.dimen
-import kotlin.math.max
-import kotlin.math.min
 
 /**
  * title:
@@ -28,120 +28,168 @@ import kotlin.math.min
  * Talk is cheap, Show me the code.
  */
 class ScaleImageView @JvmOverloads constructor(
-	context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : View(context, attrs, defStyleAttr), GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
 
-	private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-	private val size = dimen(R.dimen.dp300)
-	private val bitmap = ImageUtils.getBitmap(R.drawable.cake, size)
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val bitmapSize = dimen(R.dimen.dp300)
+    private val bitmap = ImageUtils.getBitmap(R.drawable.cake, bitmapSize)
+    private var originalOffsetX = 0f
+    private var originalOffsetY = 0f
+    private var offsetX = 0f
+    private var offsetY = 0f
+    private var maxOffsetX = 0f
+    private var maxOffsetY = 0f
 
-	// 图片的初始偏移
-	private var originOffsetX = 0f
-	private var originOffsetY = 0f
+    private var minScale = 1f
+    private var maxScale = 1f
+    private val extraScale = 1.3f
+    private val gestureDetector = GestureDetectorCompat(context, OnGestureListener())
+    private val scaleGestureDetector = ScaleGestureDetector(context, OnScaleGestureListener())
+    private var isBigMode = false
+    private var currentScale = 1f
+        set(value) {
+            field = value
+            invalidate()
+        }
+    private val scaleAnim = ObjectAnimator.ofFloat(this, "currentScale", minScale, maxScale)
 
-	// 手指移动带动图片移动
-	private var offsetX = 0f
-	private var offsetY = 0f
+    private val scroller = OverScroller(context)
+    private val overScrollSize = dimen(R.dimen.dp40)
 
-	// 最小放缩比例
-	private var smallScale = 0f
 
-	// 最大放缩比例
-	private var bigScale = 0f
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        scaleGestureDetector.onTouchEvent(event)
+        if (!scaleGestureDetector.isInProgress) {
+            gestureDetector.onTouchEvent(event)
+        }
+        return true
+    }
 
-	// 额外放缩比例
-	private var extraScaleFraction = 1.5f
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        originalOffsetX = (width - bitmap.width) / 2f
+        originalOffsetY = (height - bitmap.height) / 2f
+        if (bitmap.width / bitmap.height.toFloat() > width / height.toFloat()) {
+            minScale = width / bitmap.width.toFloat()
+            maxScale = height / bitmap.height.toFloat() * extraScale
+        } else {
+            maxScale = width / bitmap.width.toFloat()
+            minScale = height / bitmap.height.toFloat() * extraScale
+        }
+        maxOffsetX = (bitmap.width * maxScale - width) / 2f
+        maxOffsetY = (bitmap.height * maxScale - height) / 2f
+        scaleAnim.setFloatValues(minScale, maxScale)
+        currentScale = minScale
+    }
 
-	// 实际放缩比例
-	private var currentScale = 1f
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        val scaleFraction = (currentScale - minScale) / (maxScale - minScale)
+        canvas.translate(offsetX * scaleFraction, offsetY * scaleFraction)
+        canvas.scale(currentScale, currentScale, width / 2f, height / 2f)
+        canvas.drawBitmap(bitmap, originalOffsetX, originalOffsetY, paint)
+    }
 
-	// 点击监听器
-	private val gestureDetector = GestureDetectorCompat(context, this)
+    inner class OnGestureListener : GestureDetector.SimpleOnGestureListener() {
 
-	// 滑动监听器
-	private val scroller = OverScroller(context)
+        /**
+         * 手指滑动
+         * @param distanceX Float 两点X轴的距离 前一个点 减去 后一个点
+         * @param distanceY Float 两点Y轴的距离 前一个点 减去 后一个点
+         * @return Boolean
+         */
+        override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
+            if (isBigMode) {
+                offsetX -= distanceX
+                // 设置横向不超过边界
+                offsetX = if (offsetX < -maxOffsetX) -maxOffsetX else if (offsetX > maxOffsetX) maxOffsetX else offsetX
+                offsetY -= distanceY
+                // 设置纵向不超过边界
+                offsetY = if (offsetY < -maxOffsetY) -maxOffsetY else if (offsetY > maxOffsetY) maxOffsetY else offsetY
+                invalidate()
+            }
+            return false
+        }
 
-	// 放大缩小标志
-	private var inScaleBigMode = false
 
-	private var scaleFraction = 0f
-		set(value) {
-			if (field != value) {
-				field = value
-				invalidate()
-			}
-		}
-	private val scaleAnim by lazy { ObjectAnimator.ofFloat(this, "scaleFraction", 0f, 1f) }
+        /**
+         * 惯性滑动
+         * @param e1 MotionEvent
+         * @param e2 MotionEvent
+         * @param velocityX Float 抬手时候的X轴速度
+         * @param velocityY Float 抬手时候的Y轴速度
+         * @return Boolean
+         */
+        override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
+            if (isBigMode) {
+                // 把偏移后的点当作移动中心点
+                scroller.fling(
+                    offsetX.toInt(), offsetY.toInt(), velocityX.toInt(), velocityY.toInt(),
+                    -maxOffsetX.toInt(), maxOffsetX.toInt(), -maxOffsetY.toInt(), maxOffsetY.toInt(),
+                    overScrollSize, overScrollSize)
+                // 在下一桢进行绘制
+                ViewCompat.postOnAnimation(this@ScaleImageView, refreshRunnable)
+            }
+            return false
+        }
 
-	override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-		originOffsetX = (width - bitmap.width) / 2f
-		originOffsetY = (height - bitmap.height) / 2f
+        private val refreshRunnable = object : Runnable {
+            override fun run() {
+                scroller.computeScrollOffset()
+                offsetX = scroller.currX.toFloat()
+                offsetY = scroller.currY.toFloat()
+                invalidate()
+                if (!scroller.isFinished) {
+                    postOnAnimation(this)
+                }
+            }
+        }
 
-		val widthScale = width / bitmap.width.toFloat()
-		val heightScale = height / bitmap.height.toFloat()
-		smallScale = min(widthScale, heightScale)
-		bigScale = max(widthScale, heightScale) * extraScaleFraction
-	}
+        override fun onDown(e: MotionEvent?): Boolean = true
 
-	override fun onDraw(canvas: Canvas) {
-		canvas.translate(offsetX, offsetY)
-		currentScale = smallScale + (bigScale - smallScale) * scaleFraction
-		canvas.scale(currentScale, currentScale, width / 2f, height / 2f)
-		canvas.drawBitmap(bitmap, originOffsetX, originOffsetY, paint)
-	}
+        override fun onDoubleTap(e: MotionEvent): Boolean {
+            isBigMode = !isBigMode
+            if (isBigMode) {
+                // 这里的负号？ 为了让图片向右 画布需要向左移动  上下左右同理
+                offsetX = -(e.x - width / 2f) * (maxScale / minScale - 1)
+                offsetY = -(e.y - height / 2f) * (maxScale / minScale - 1)
+                // 设置横向不超过边界
+                offsetX = offsetX.coerceAtLeast(-maxOffsetX).coerceAtMost(maxOffsetX)
+                // 设置纵向不超过边界
+                offsetY = offsetY.coerceAtLeast(-maxOffsetY).coerceAtMost(maxOffsetY)
+                scaleAnim.start()
+            } else {
+                scaleAnim.reverse()
+            }
+            return true
+        }
 
-	@SuppressLint("ClickableViewAccessibility")
-	override fun onTouchEvent(event: MotionEvent?): Boolean {
-		return gestureDetector.onTouchEvent(event)
-	}
+    }
 
-	override fun onDown(e: MotionEvent?): Boolean = true
+    inner class OnScaleGestureListener : ScaleGestureDetector.SimpleOnScaleGestureListener() {
 
-	// 按压的时候
-	override fun onShowPress(e: MotionEvent?) {}
+        override fun onScaleBegin(detector: ScaleGestureDetector): Boolean {
+            // 这里的负号？ 为了让图片向右 画布需要向左移动  上下左右同理
+            offsetX = -(detector.focusX - width / 2f) * (maxScale / minScale - 1)
+            offsetY = -(detector.focusY - height / 2f) * (maxScale / minScale - 1)
+            return true
+        }
 
-	// 单击监听 在长按时间内 一次手指按下后抬起 如果支持双击此时有可能是双击中的第一次抬起 不支持双击推荐使用
-	override fun onSingleTapUp(e: MotionEvent?): Boolean = false
-
-	// 长按监听
-	override fun onLongPress(e: MotionEvent?) {}
-
-	// 手指移动的时候
-	override fun onScroll(downEvent: MotionEvent?, currentEvent: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
-		if (inScaleBigMode) {
-			offsetX -= distanceX
-			offsetX = min(offsetX, (bitmap.width * bigScale - width) / 2)
-			offsetX = max(offsetX, -((bitmap.width * bigScale - width) / 2))
-			offsetY -= distanceY
-			offsetY = min(offsetY, (bitmap.height * bigScale - height) / 2)
-			offsetY = max(offsetY, -(bitmap.height * bigScale - height) / 2)
-			invalidate()
-		}
-		return false
-	}
-
-	// 手指移开后继续惯性滑动的时候
-	override fun onFling(downEvent: MotionEvent?, currentEvent: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
-		if (inScaleBigMode) {
-		}
-		return false
-	}
-
-	// 确定一定肯定是单机事件 但是会有双击的检测时间 会等待这个时间 支持双击的时候推荐使用
-	override fun onSingleTapConfirmed(e: MotionEvent?): Boolean = true
-
-	// 双击事件
-	override fun onDoubleTap(e: MotionEvent?): Boolean {
-		inScaleBigMode = !inScaleBigMode
-		if (inScaleBigMode) {
-			scaleAnim.start()
-		} else {
-			scaleAnim.reverse()
-		}
-		return true
-	}
-
-	// 双击第二次按下不抬起并且开始滑动
-	override fun onDoubleTapEvent(e: MotionEvent?): Boolean = true
+        override fun onScale(detector: ScaleGestureDetector): Boolean {
+            val temp = currentScale * detector.scaleFactor
+            return if (temp < minScale || temp > maxScale) {
+                false
+            } else {
+                currentScale *= detector.scaleFactor
+                true
+            }
+            // 获取与初始状态的比例
+            // return false
+            // 获取上一状态的比例
+            // return true
+        }
+    }
 
 }
